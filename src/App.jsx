@@ -1,29 +1,61 @@
-import React, { useState } from 'react';
-import TodoList from './TodoList';
+import { useEffect, useRef, useState } from "react";
+import TodoList from "./components/TodoList";
+import axios from "axios";
 
 function App() {
-  const [todos, setTodos] = useState([
-    { id: 1, task: 'Do the dishes', completed: false },
-    { id: 2, task: 'Take out trash', completed: false },
-  ]);
+  const reference = useRef();
+  const [todos, setTodos] = useState([]);
 
-  const addTodo = (newTask) => {
-    const newTodo = { id: todos.length + 1, task: newTask, completed: false };
-    setTodos([...todos, newTodo]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/todos")
+      .then((response) => {
+        setTodos(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const handleAddTodo = (newTask) => {
+    axios
+      .post("http://localhost:3000/todos", {
+        id: (todos.length + 1).toString,
+        task: reference.current.value,
+        completed: false,
+      })
+      .then((res) => {
+        setTodos([...todos, res.data]);
+        reference.current.value = "";
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const toggleTodo = (id) => {
-    const updatedTodos = todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+  const updateTodo = (ele) => {
+    setTodos(
+      todos.map((todo) => {
+        return todo.id === ele.id
+          ? { ...todo, completed: !todo.completed }
+          : todo;
+      })
     );
-    setTodos(updatedTodos);
   };
 
   return (
     <div>
-      <h1>Todo List</h1>
-      <TodoList todos={todos} toggleTodo={toggleTodo} />
-      <button onClick={() => addTodo('New Task')}>Add Todo</button>
+      <h1 className="title">Todo List</h1>
+      <TodoList todos={todos} updateTodo={updateTodo} />
+      <input
+        className="inputAdd"
+        type="text"
+        ref={reference}
+        placeholder="Enter task"
+      />
+      <button className="buttonAdd" onClick={handleAddTodo}>
+        Add Todo
+      </button>
     </div>
   );
 }

@@ -1,0 +1,39 @@
+{
+  "todos": [
+    {
+      "id": "1",
+      "task": "task1",
+      "completed": false
+    },
+    {
+      "id": "2",
+      "task": "task2",
+      "completed": true
+    },
+    {
+      "id": "3",
+      "task": "task3",
+      "completed": false
+    },
+    {
+      "id": "4",
+      "task": "task4",
+      "completed": false
+    },
+    {
+      "id": "5",
+      "task": "task5",
+      "completed": false
+    },
+    {
+      "id": "6",
+      "task": "task6",
+      "completed": true
+    },
+    {
+      "id": "7",
+      "task": "task7",
+      "completed": false
+    }
+  ]
+}
